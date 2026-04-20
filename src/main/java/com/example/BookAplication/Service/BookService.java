@@ -3,8 +3,9 @@ package com.example.BookAplication.Service;
 import com.example.BookAplication.Dto.BookRequestDTO;
 import com.example.BookAplication.Dto.BookResponseDTO;
 import com.example.BookAplication.Entity.Book;
+import com.example.BookAplication.Exception.BookNotFoundException;
 import com.example.BookAplication.Repository.BookRepository;
-import com.example.BookAplication.mapper.BookMapper;
+import com.example.BookAplication.Mapper.BookMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,13 +25,13 @@ public class BookService {
 
     public BookResponseDTO getBookByName(String name) {
         Book bookByTitle = Optional.ofNullable(bookRepository.findBookByTitle(name))
-                .orElseThrow(() -> new RuntimeException("Book Not Found with title: "+name));
+                .orElseThrow(() -> new BookNotFoundException("Book Not Found with title: "+name));
         return BookMapper.toDTO(bookByTitle);
     }
 
     public BookResponseDTO updateBook(Integer id, BookRequestDTO book) {
         Book existingBook = bookRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Book Not Found"));
+                .orElseThrow(() -> new BookNotFoundException("Book Not Found"));
 
         existingBook.setTitle(book.getTitle());
         existingBook.setAuthor(book.getAuthor());
@@ -41,13 +42,13 @@ public class BookService {
 
     public void deleteBook(Integer bookId) {
         if(!bookRepository.existsById(bookId))
-            throw new RuntimeException("Book Not Found with id: "+bookId);
+            throw new BookNotFoundException("Book Not Found with id: "+bookId);
         bookRepository.deleteById(bookId);
     }
 
     public BookResponseDTO getBookById(Integer bookId) {
         Book bookById = bookRepository.findById(bookId)
-                .orElseThrow(() -> new RuntimeException("Book not found with id: "+bookId));
+                .orElseThrow(() -> new BookNotFoundException("Book not found with id: "+bookId));
 
         return BookMapper.toDTO(bookById);
     }

@@ -1,4 +1,4 @@
-package com.example.BookAplication.mapper;
+package com.example.BookAplication.Mapper;
 
 import com.example.BookAplication.Dto.BookRequestDTO;
 import com.example.BookAplication.Dto.BookResponseDTO;
