@@ -23,7 +23,8 @@ public class BookService {
     }
 
     public BookResponseDTO getBookByName(String name) {
-        Book bookByTitle = bookRepository.findBookByTitle(name);
+        Book bookByTitle = Optional.ofNullable(bookRepository.findBookByTitle(name))
+                .orElseThrow(() -> new RuntimeException("Book Not Found with title: "+name));
         return BookMapper.toDTO(bookByTitle);
     }
 
@@ -31,7 +32,7 @@ public class BookService {
         Book existingBook = bookRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Book Not Found"));
 
-        existingBook.setTitle(book.getBookName());
+        existingBook.setTitle(book.getTitle());
         existingBook.setAuthor(book.getAuthor());
         existingBook.setGenre(book.getGenre());
 
@@ -39,11 +40,15 @@ public class BookService {
     }
 
     public void deleteBook(Integer bookId) {
+        if(!bookRepository.existsById(bookId))
+            throw new RuntimeException("Book Not Found with id: "+bookId);
         bookRepository.deleteById(bookId);
     }
 
     public BookResponseDTO getBookById(Integer bookId) {
-        Optional<Book> bookById = bookRepository.findById(bookId);
-        return BookMapper.toDTO(bookById.get());
+        Book bookById = bookRepository.findById(bookId)
+                .orElseThrow(() -> new RuntimeException("Book not found with id: "+bookId));
+
+        return BookMapper.toDTO(bookById);
     }
 }

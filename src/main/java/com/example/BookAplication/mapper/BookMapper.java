@@ -9,7 +9,7 @@ public class BookMapper {
     public static Book toEntity(BookRequestDTO dto) {
         return new Book(
                 null,
-                dto.getBookName(),
+                dto.getTitle(),
                 dto.getAuthor(),
                 dto.getGenre()
         );
@@ -18,7 +18,7 @@ public class BookMapper {
     public static BookResponseDTO toDTO(Book book) {
         return BookResponseDTO.builder()
                 .id(book.getId())
-                .bookName(book.getTitle())
+                .title(book.getTitle())
                 .author(book.getAuthor())
                 .genre(book.getGenre())
                 .build();

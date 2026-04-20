@@ -7,7 +7,7 @@ import lombok.Data;
 public class BookRequestDTO {
 
     @NotBlank(message = "Name is required")
-    private String bookName;
+    private String title;
 
     @NotBlank(message = "Author is required")
     private String author;
